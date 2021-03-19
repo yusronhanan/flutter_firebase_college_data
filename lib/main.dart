@@ -45,7 +45,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   createData() {
-    print("created");
+    print("created: insert document to firestore collection");
     CollectionReference myStudents =
         FirebaseFirestore.instance.collection('MyStudents');
 
