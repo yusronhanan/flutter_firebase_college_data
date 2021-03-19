@@ -237,7 +237,45 @@ class _MyAppState extends State<MyApp> {
                     },
                   )
                 ],
-              )
+              ),
+              StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection("MyStudents")
+                      .snapshots(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.hasData) {
+                      return ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: snapshot.data.docs.length,
+                          itemBuilder: (context, index) {
+                            DocumentSnapshot documentSnapshot =
+                                snapshot.data.docs[index];
+                            return Center(
+                                child: new SingleChildScrollView(
+                              child: Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    child:
+                                        Text(documentSnapshot["studentName"]),
+                                  ),
+                                  Expanded(
+                                    child: Text(documentSnapshot["studentID"]),
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                        documentSnapshot["studyProgramID"]),
+                                  ),
+                                  Expanded(
+                                    child: Text(documentSnapshot["studentGPA"]
+                                        .toString()),
+                                  )
+                                ],
+                              ),
+                            ));
+                          });
+                    }
+                  })
             ],
           ),
         ));
