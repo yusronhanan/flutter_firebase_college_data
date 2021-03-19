@@ -69,6 +69,7 @@ class _MyAppState extends State<MyApp> {
         .get()
         .then((QuerySnapshot querySnapshot) => {
               querySnapshot.docs.forEach((doc) {
+                print(doc.reference.id); // get document id
                 print(doc["studentName"]);
                 print(doc["studentID"]);
                 print(doc["studyProgramID"]);
@@ -78,7 +79,28 @@ class _MyAppState extends State<MyApp> {
   }
 
   updateData() {
-    print("updated");
+    // update: update document from firestore collection based on name
+    CollectionReference myStudents =
+        FirebaseFirestore.instance.collection('MyStudents');
+    myStudents
+        .where('studentID', isEqualTo: studentID)
+        .get()
+        .then((QuerySnapshot querySnapshot) => {
+              querySnapshot.docs.forEach((doc) {
+                print(doc);
+                myStudents
+                    .doc(doc.reference.id)
+                    .update({
+                      "studentName": studentName,
+                      // "studentID": studentID,
+                      "studyProgramID": studyProgramID,
+                      "studentGPA": studentGPA
+                    })
+                    .then((value) => print("User Updated"))
+                    .catchError(
+                        (error) => print("Failed to update user: $error"));
+              })
+            });
   }
 
   deleteData() {
