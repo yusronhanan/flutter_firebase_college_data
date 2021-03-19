@@ -45,7 +45,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   createData() {
-    print("created: insert document to firestore collection");
+    // created: insert document to firestore collection
     CollectionReference myStudents =
         FirebaseFirestore.instance.collection('MyStudents');
 
@@ -61,7 +61,20 @@ class _MyAppState extends State<MyApp> {
   }
 
   readData() {
-    print("read");
+    // read: read document from firestore collection based on name
+    CollectionReference myStudents =
+        FirebaseFirestore.instance.collection('MyStudents');
+    myStudents
+        .where('studentName', isEqualTo: studentName)
+        .get()
+        .then((QuerySnapshot querySnapshot) => {
+              querySnapshot.docs.forEach((doc) {
+                print(doc["studentName"]);
+                print(doc["studentID"]);
+                print(doc["studyProgramID"]);
+                print(doc["studentGPA"]);
+              })
+            });
   }
 
   updateData() {
