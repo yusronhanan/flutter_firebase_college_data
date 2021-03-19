@@ -79,7 +79,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   updateData() {
-    // update: update document from firestore collection based on name
+    // update: update document from firestore collection based on sid
     CollectionReference myStudents =
         FirebaseFirestore.instance.collection('MyStudents');
     myStudents
@@ -104,7 +104,23 @@ class _MyAppState extends State<MyApp> {
   }
 
   deleteData() {
-    print("deleted");
+    // update: delete document from firestore collection based on name
+    CollectionReference myStudents =
+        FirebaseFirestore.instance.collection('MyStudents');
+    myStudents
+        .where('studentName', isEqualTo: studentName)
+        .get()
+        .then((QuerySnapshot querySnapshot) => {
+              querySnapshot.docs.forEach((doc) {
+                print(doc);
+                myStudents
+                    .doc(doc.reference.id)
+                    .delete()
+                    .then((value) => print("User Deleted"))
+                    .catchError(
+                        (error) => print("Failed to delete user: $error"));
+              })
+            });
   }
 
   @override
